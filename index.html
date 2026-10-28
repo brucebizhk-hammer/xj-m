@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0810">
+<meta name="description" content="玄机先生 · 八字紫微命理问答">
+<title>玄机先生 · 命理</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --ink:#0a0810; --ink2:#12101c; --ink3:#1a1626;
+    --gold:#c9a464; --gold-2:#e2c68d; --gold-dim:rgba(201,164,100,.28);
+    --text:#ece8f3; --text-2:#b9b2c8; --dim:#7d7691; --dim2:#5f5873;
+    --line:rgba(255,255,255,.075); --line-2:rgba(201,164,100,.16);
+    --wood:#5fa87d; --fire:#cf6a52; --earth:#c0914f; --metal:#d8b46c; --water:#5b8fc9;
+    --glass:rgba(255,255,255,.042); --glass-2:rgba(255,255,255,.06);
+    --safe-b:env(safe-area-inset-bottom,0px);
+    --safe-t:env(safe-area-inset-top,0px);
+    --serif:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",serif;
+  }
+  html,body{height:100%}
+  body{
+    color:var(--text);
+    font-family:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    background:
+      radial-gradient(120% 55% at 50% -8%, rgba(201,164,100,.14) 0%, transparent 58%),
+      radial-gradient(90% 45% at 100% 102%, rgba(96,74,150,.18) 0%, transparent 62%),
+      radial-gradient(70% 40% at -10% 70%, rgba(70,54,110,.14) 0%, transparent 60%),
+      linear-gradient(178deg,#0a0810 0%,#0e0b16 46%,#0b0912 100%);
+    background-attachment:fixed;
+    height:100dvh; overflow:hidden;
+    display:flex; justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  @supports not (height:100dvh){body{height:100vh}}
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.55) 0, transparent 100%),
+      radial-gradient(1px 1px at 78% 9%, rgba(255,255,255,.4) 0, transparent 100%),
+      radial-gradient(1px 1px at 34% 42%, rgba(255,255,255,.3) 0, transparent 100%),
+      radial-gradient(1px 1px at 88% 56%, rgba(255,255,255,.32) 0, transparent 100%),
+      radial-gradient(1px 1px at 22% 76%, rgba(255,255,255,.26) 0, transparent 100%),
+      radial-gradient(1px 1px at 64% 88%, rgba(255,255,255,.3) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 46% 6%, rgba(226,198,141,.5) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 8% 58%, rgba(226,198,141,.35) 0, transparent 100%);
+  }
+  .app{
+    position:relative; z-index:1; width:100%; max-width:480px;
+    height:100%; display:flex; flex-direction:column;
+    border-left:1px solid rgba(255,255,255,.045); border-right:1px solid rgba(255,255,255,.045);
+  }
+
+  /* ---------- 顶栏 ---------- */
+  .hdr{
+    flex:none; display:flex; align-items:center; gap:11px;
+    padding:calc(11px + var(--safe-t)) 17px 11px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(10,8,16,.94),rgba(10,8,16,.72));
+    backdrop-filter:blur(18px) saturate(1.2); -webkit-backdrop-filter:blur(18px) saturate(1.2);
+    position:relative;
+  }
+  .hdr::after{
+    content:""; position:absolute; left:17px; right:17px; bottom:-1px; height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold-dim) 22%,var(--gold-dim) 78%,transparent);
+  }
+  .sigil{
+    width:40px; height:40px; flex:none; border-radius:50%;
+    display:grid; place-items:center;
+    font-family:var(--serif); font-size:19px; color:#231a0c; font-weight:600;
+    background:linear-gradient(150deg,#e6cc95 0%,#c9a464 46%,#96753f 100%);
+    box-shadow:0 0 0 1px rgba(226,198,141,.35),0 4px 16px rgba(201,164,100,.22),inset 0 1px 0 rgba(255,255,255,.4);
+  }
+  .brand{flex:1; min-width:0}
+  .brand h1{
+    font-family:var(--serif); font-size:16.5px; font-weight:600; letter-spacing:2.5px;
+    line-height:1.2; color:#f3efe6;
+  }
+  .status{display:flex; align-items:center; gap:5px; margin-top:3px; font-size:11px; color:var(--dim); letter-spacing:.2px}
+  .dot{width:5.5px;height:5.5px;border-radius:50%;background:#6fbf8a;box-shadow:0 0 6px rgba(111,191,138,.75);flex:none}
+  .dot.off{background:#c9905a;box-shadow:0 0 6px rgba(201,144,90,.6)}
+  .ghost-btn{
+    flex:none; height:31px; padding:0 13px; border-radius:999px;
+    border:1px solid var(--line-2); background:rgba(201,164,100,.05);
+    color:var(--gold-2); font-size:12px; letter-spacing:.6px; font-family:inherit;
+    transition:.18s;
+  }
+  .ghost-btn:active{background:rgba(201,164,100,.16); transform:scale(.97)}
+
+  /* ---------- 滚动区 ---------- */
+  .stage{flex:1; min-height:0; position:relative; display:flex; flex-direction:column}
+  .msgs{
+    flex:1; min-height:0; overflow-y:auto; overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    padding:18px 15px 8px; display:flex; flex-direction:column; gap:16px;
+    scrollbar-width:none;
+  }
+  .msgs::-webkit-scrollbar{display:none}
+
+  /* ---------- 迎宾 ---------- */
+  .welcome{padding:14px 2px 6px; animation:rise .55s cubic-bezier(.2,.7,.3,1) both}
+  .w-sigil{
+    width:62px;height:62px;margin:6px auto 18px;border-radius:50%;
+    display:grid;place-items:center;font-family:var(--serif);font-size:27px;color:var(--gold-2);
+    border:1px solid var(--line-2);
+    background:radial-gradient(circle at 30% 25%,rgba(201,164,100,.18),transparent 70%);
+    box-shadow:0 0 34px rgba(201,164,100,.13),inset 0 0 22px rgba(201,164,100,.07);
+  }
+  .w-title{
+    font-family:var(--serif); font-size:23px; letter-spacing:7px; text-align:center;
+    color:#f2ece0; font-weight:500; margin-bottom:7px; text-indent:7px;
+  }
+  .w-sub{text-align:center;font-size:12px;color:var(--dim);letter-spacing:3px;margin-bottom:20px;text-indent:3px}
+  .w-lead{
+    text-align:center; font-size:13px; line-height:2; color:var(--text-2);
+    margin:0 auto 24px; max-width:290px;
+  }
+  .w-lead b{color:var(--gold-2);font-weight:500}
+
+  .topics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px}
+  .topic{
+    position:relative; padding:14px 2px 12px; border-radius:15px; text-align:center;
+    border:1px solid var(--line); background:linear-gradient(168deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    color:var(--text-2); font-family:inherit; transition:.2s cubic-bezier(.2,.7,.3,1);
+    overflow:hidden;
+  }
+  .topic::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(70% 60% at 50% 0%,rgba(201,164,100,.16),transparent 70%);
+    opacity:0; transition:.25s;
+  }
+  .topic .g{
+    display:block; font-family:var(--serif); font-size:19px; color:var(--gold-2);
+    margin-bottom:5px; letter-spacing:0; position:relative;
+  }
+  .topic .n{display:block;font-size:11.5px;letter-spacing:1.2px;position:relative}
+  .topic:active{transform:scale(.965); border-color:rgba(201,164,100,.42)}
+  .topic:active::before{opacity:1}
+
+  .w-foot{
+    text-align:center; font-size:10.5px; color:var(--dim2); letter-spacing:.5px;
+    line-height:1.9; padding-top:2px;
+  }
+
+  /* ---------- 消息 ---------- */
+  .row{display:flex;gap:9px;align-items:flex-start;min-width:0;animation:rise .38s cubic-bezier(.2,.7,.3,1) both}
+  .row.me{flex-direction:row-reverse}
+  .row > .wrap{min-width:0;max-width:100%;display:flex;flex-direction:column}
+  .row.me > .wrap{align-items:flex-end}
+  .ava{
+    width:27px;height:27px;flex:none;border-radius:50%;display:grid;place-items:center;
+    font-family:var(--serif);font-size:12px;color:#231a0c;margin-top:17px;
+    background:linear-gradient(150deg,#e6cc95,#b8914f);
+    box-shadow:0 0 0 1px rgba(226,198,141,.22);
+  }
+  .who{font-size:10px;color:var(--dim2);letter-spacing:1.4px;margin-bottom:6px;padding-left:2px}
+  .row.me .who{padding-right:2px}
+
+  .bubble{
+    max-width:100%; padding:13px 15px; border-radius:15px;
+    font-size:15px; line-height:1.92; letter-spacing:.15px;
+    white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;
+  }
+  .row.them .bubble{
+    background:linear-gradient(168deg,rgba(255,255,255,.062),rgba(255,255,255,.028));
+    border:1px solid var(--line); border-top-left-radius:5px;
+    box-shadow:0 2px 14px rgba(0,0,0,.22);
+  }
+  .row.me .bubble{
+    background:linear-gradient(150deg,#c9a464 0%,#b18a4c 55%,#94713c 100%);
+    color:#20180a; border-top-right-radius:5px; font-size:14.5px; line-height:1.75;
+    box-shadow:0 3px 18px rgba(201,164,100,.2);
+  }
+  .bubble.err{
+    color:#e8a9a3; border-color:rgba(207,106,82,.34);
+    background:linear-gradient(168deg,rgba(207,106,82,.13),rgba(207,106,82,.05));
+  }
+
+  /* 打字中 */
+  .typing-b{display:flex;align-items:center;gap:9px;padding:12px 15px}
+  .typing-b .dots{display:flex;gap:4px}
+  .typing-b i{
+    width:5px;height:5px;border-radius:50%;background:var(--gold);
+    animation:pulse 1.3s infinite ease-in-out;
+  }
+  .typing-b i:nth-child(2){animation-delay:.18s}
+  .typing-b i:nth-child(3){animation-delay:.36s}
+  .typing-b .txt{font-size:11.5px;color:var(--dim);letter-spacing:.4px}
+  @keyframes pulse{0%,70%,100%{opacity:.22;transform:translateY(0)}35%{opacity:1;transform:translateY(-3px)}}
+  @keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+
+  /* ---------- 命盘卡 ---------- */
+  .chart-card.solo{margin-top:0}
+  .chart-card.solo + .bubble{margin-top:11px}
+  .chart-card{
+    margin-top:11px; border-radius:14px; overflow:hidden;
+    border:1px solid var(--line-2);
+    background:linear-gradient(170deg,rgba(26,21,36,.96),rgba(16,13,24,.96));
+    box-shadow:0 4px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.045);
+  }
+  .cc-head{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:10px 13px 9px; border-bottom:1px solid rgba(201,164,100,.14);
+    background:linear-gradient(180deg,rgba(201,164,100,.085),transparent);
+  }
+  .cc-tag{
+    font-family:var(--serif);font-size:12.5px;letter-spacing:2.5px;color:var(--gold-2);
+  }
+  .cc-date{font-size:10.5px;color:var(--dim);letter-spacing:.3px;white-space:nowrap}
+  .cc-sub{
+    padding:8px 13px 10px; font-size:10.5px; color:var(--dim); line-height:1.75;
+    border-bottom:1px solid rgba(255,255,255,.045);
+  }
+
+  .pg{
+    display:grid; grid-template-columns:38px repeat(4,1fr);
+    padding:9px 6px 4px; gap:0;
+  }
+  .pg > div{
+    padding:6px 1px; text-align:center; font-size:12.5px; line-height:1.5;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pg .lbl{
+    font-size:9.5px; color:var(--dim2); letter-spacing:1px; justify-content:flex-start; padding-left:5px;
+  }
+  .pg .hd{
+    font-family:var(--serif); font-size:11px; color:var(--gold); letter-spacing:1.5px; padding-bottom:7px;
+  }
+  .pg .gz{
+    font-family:var(--serif); font-size:23px; font-weight:500; line-height:1.15;
+    text-shadow:0 0 11px currentColor; opacity:.94;
+  }
+  .pg .ss{font-size:11px;color:var(--text-2);letter-spacing:.5px}
+  .pg .small{display:block;font-size:9.5px;color:var(--dim);line-height:1.55;letter-spacing:0;padding:6px 1px;text-align:center;white-space:normal;overflow:hidden}
+  .pg .small span{display:block;white-space:nowrap;line-height:1.5;font-size:9px}
+  .pg .daycol{background:linear-gradient(180deg,rgba(201,164,100,.09),rgba(201,164,100,.03))}
+  .pg .dim{opacity:.45}
+
+  .wx-木{color:var(--wood)} .wx-火{color:var(--fire)} .wx-土{color:var(--earth)}
+  .wx-金{color:var(--metal)} .wx-水{color:var(--water)}
+
+  .cc-sec{padding:11px 13px; border-top:1px solid rgba(255,255,255,.05)}
+  .cc-sec-t{
+    font-size:9.5px; letter-spacing:2px; color:var(--gold); opacity:.85; margin-bottom:9px;
+  }
+  .dm-row{display:flex;align-items:center;gap:11px}
+  .dm-glyph{
+    width:44px;height:44px;flex:none;border-radius:11px;display:grid;place-items:center;
+    font-family:var(--serif);font-size:22px;
+    background:rgba(255,255,255,.045); border:1px solid var(--line);
+  }
+  .dm-info{flex:1;min-width:0}
+  .dm-line1{font-size:12px;color:var(--text);letter-spacing:.2px;margin-bottom:5px;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 7px}
+  .dm-line1 .k{font-family:var(--serif);color:var(--gold-2);font-size:13px}
+  .dm-line1 .s{color:var(--text-2)}
+  .dm-line1 .n{color:var(--dim);font-variant-numeric:tabular-nums}
+  .dm-line1 em{font-style:normal;color:var(--gold-2)}
+  .bal{height:4px;border-radius:99px;background:rgba(255,255,255,.075);overflow:hidden;display:flex}
+  .bal b{display:block;height:100%}
+  .bal b.a{background:linear-gradient(90deg,#5fa87d,#8fc9a6)}
+  .bal b.b{background:linear-gradient(90deg,rgba(207,106,82,.75),rgba(207,106,82,.35))}
+  .bal-legend{display:flex;justify-content:space-between;font-size:9.5px;color:var(--dim2);margin-top:4px}
+
+  .wx-list{display:flex;flex-direction:column;gap:6px}
+  .wx-item{display:flex;align-items:center;gap:8px;font-size:10.5px}
+  .wx-name{width:14px;flex:none;text-align:center;font-family:var(--serif)}
+  .wx-bar{flex:1;height:5px;border-radius:99px;background:rgba(255,255,255,.05);overflow:hidden}
+  .wx-bar b{display:block;height:100%;border-radius:99px;opacity:.82}
+  .wx-val{width:34px;flex:none;text-align:right;color:var(--dim);font-variant-numeric:tabular-nums}
+
+  .tag-wrap{display:flex;flex-wrap:wrap;gap:5px}
+  .tag{
+    font-size:10px;padding:3.5px 8px;border-radius:6px;letter-spacing:.3px;font-weight:400;
+    background:rgba(201,164,100,.075);border:1px solid rgba(201,164,100,.16);color:#d6b57e;
+  }
+  .tag.plain{background:rgba(255,255,255,.04);border-color:var(--line);color:var(--text-2)}
+
+  .yun-scroll{
+    display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;margin:0 -13px;padding-left:13px;padding-right:13px;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  .yun-scroll::-webkit-scrollbar{display:none}
+  .yun{
+    flex:none;min-width:52px;padding:8px 6px 7px;border-radius:10px;text-align:center;
+    border:1px solid var(--line);background:rgba(255,255,255,.028);
+  }
+  .yun.cur{
+    border-color:rgba(201,164,100,.5);background:linear-gradient(180deg,rgba(201,164,100,.16),rgba(201,164,100,.05));
+    box-shadow:0 0 14px rgba(201,164,100,.14);
+  }
+  .yun .gz{font-family:var(--serif);font-size:15px;letter-spacing:1px;line-height:1.3}
+  .yun .age{font-size:9px;color:var(--dim2);margin-top:2px;letter-spacing:0}
+
+  .ln-wrap{display:flex;flex-wrap:wrap;gap:5px}
+  .ln{
+    font-size:10px;padding:4px 7px;border-radius:6px;border:1px solid var(--line);
+    background:rgba(255,255,255,.03);color:var(--text-2);letter-spacing:.2px;
+  }
+  .ln b{font-family:var(--serif);font-weight:500;margin-left:3px}
+
+  /* 紫微 */
+  .zw-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .zw{
+    padding:8px 9px;border-radius:9px;border:1px solid var(--line);
+    background:rgba(255,255,255,.028);min-width:0;
+  }
+  .zw.key{border-color:rgba(201,164,100,.42);background:linear-gradient(160deg,rgba(201,164,100,.13),rgba(201,164,100,.03))}
+  .zw-name{font-size:9.5px;color:var(--dim);letter-spacing:1px;margin-bottom:3px;display:flex;justify-content:space-between}
+  .zw-stars{font-family:var(--serif);font-size:12.5px;font-weight:400;color:var(--gold-2);line-height:1.5;word-break:break-word}
+  .zw-stars .none{color:var(--dim2);font-size:10.5px;font-family:inherit}
+  .zw-aux{font-size:9px;color:var(--dim2);margin-top:2px;line-height:1.4;word-break:break-word}
+
+
+  /* ---------- 通用：分段与折叠 ---------- */
+  .bubble .para{margin:0 0 .78em}
+  .bubble .para:last-child{margin-bottom:0}
+  .bubble .para.lead{color:#f0e9dc}
+  .clamp{position:relative;max-height:340px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(180deg,#000 62%,rgba(0,0,0,.15) 100%);
+    mask-image:linear-gradient(180deg,#000 62%,rgba(0,0,0,.15) 100%)}
+  .more{
+    display:block;width:100%;margin-top:9px;padding:7px 0 2px;border:none;background:none;
+    color:var(--gold);font-family:inherit;font-size:11.5px;letter-spacing:1.2px;
+    border-top:1px solid rgba(201,164,100,.14);
+  }
+  .more:active{color:var(--gold-2)}
+
+  /* ---------- 塔罗 ---------- */
+  .tr-head{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--dim);letter-spacing:.6px}
+  .tr-head b{font-weight:500;color:var(--gold-2);font-variant-numeric:tabular-nums}
+  .tr{padding:10px 0;border-top:1px dashed rgba(255,255,255,.07);display:flex;gap:10px}
+  .tr:first-child{border-top:none;padding-top:2px}
+  .tr-pos{
+    flex:none;width:32px;font-size:9.5px;color:var(--dim2);letter-spacing:1px;
+    padding-top:3px;text-align:center;
+  }
+  .tr-pos span{display:block;font-family:var(--serif);font-size:12px;color:var(--dim);margin-top:3px}
+  .tr-body{flex:1;min-width:0}
+  .tr-name{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .tr-name b{font-family:var(--serif);font-size:15px;font-weight:500;color:var(--gold-2);letter-spacing:.6px}
+  .tr-flag{font-size:9px;padding:1.5px 6px;border-radius:4px;letter-spacing:.5px}
+  .tr-flag.up{color:#93cbab;background:rgba(95,168,125,.14);border:1px solid rgba(95,168,125,.22)}
+  .tr-flag.rev{color:#de9d89;background:rgba(207,106,82,.13);border:1px solid rgba(207,106,82,.22)}
+  .tr-meaning{font-size:10.5px;color:var(--dim);line-height:1.7;margin-top:4px}
+
+  /* ---------- 六爻 ---------- */
+  .hex-wrap{display:flex;align-items:stretch;gap:9px}
+  .hex-box{
+    flex:1;min-width:0;padding:10px 9px 9px;border-radius:11px;
+    border:1px solid var(--line);background:rgba(255,255,255,.026);text-align:center;
+  }
+  .hex-box.key{border-color:rgba(201,164,100,.36);background:linear-gradient(165deg,rgba(201,164,100,.11),rgba(201,164,100,.02))}
+  .hex-lbl{font-size:9px;color:var(--dim2);letter-spacing:1.6px;margin-bottom:7px}
+  .hex{display:flex;flex-direction:column;gap:4.5px;margin:0 auto 8px;max-width:74px}
+  .yao{height:4.5px;display:flex;gap:6px;align-items:center;position:relative}
+  .yao i{display:block;height:100%;border-radius:1px;background:rgba(201,164,100,.62);flex:1}
+  .yao.yin i:first-child{margin-right:22%}
+  .yao.mv i{background:var(--gold-2);box-shadow:0 0 7px rgba(226,198,141,.5)}
+  .yao::after{
+    content:"";position:absolute;right:-9px;top:50%;width:3px;height:3px;border-radius:50%;
+    transform:translateY(-50%);background:transparent;
+  }
+  .yao.mv::after{background:var(--gold-2);box-shadow:0 0 6px rgba(226,198,141,.8)}
+  .hex-name{font-family:var(--serif);font-size:14.5px;color:var(--gold-2);letter-spacing:1px;line-height:1.35}
+  .hex-sub{font-size:9px;color:var(--dim2);margin-top:3px;letter-spacing:.3px}
+  .hex-arrow{flex:none;align-self:center;color:var(--dim2);font-size:13px;letter-spacing:0}
+  .mv-line{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+
+  /* ---------- 黄历 ---------- */
+  .al-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .al-col{padding:9px 10px;border-radius:10px;border:1px solid var(--line);min-width:0}
+  .al-col.yi{background:linear-gradient(165deg,rgba(95,168,125,.1),rgba(95,168,125,.02));border-color:rgba(95,168,125,.2)}
+  .al-col.ji{background:linear-gradient(165deg,rgba(207,106,82,.1),rgba(207,106,82,.02));border-color:rgba(207,106,82,.2)}
+  .al-t{font-family:var(--serif);font-size:11px;letter-spacing:2px;margin-bottom:6px}
+  .al-col.yi .al-t{color:#93cbab}
+  .al-col.ji .al-t{color:#de9d89}
+  .al-items{display:flex;flex-wrap:wrap;gap:4px}
+  .al-items span{font-size:9.5px;color:var(--text-2);padding:2px 5px;border-radius:4px;background:rgba(255,255,255,.045)}
+  .pos-row{display:flex;gap:7px;margin-top:9px}
+  .pos{flex:1;text-align:center;padding:7px 0 6px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.026)}
+  .pos em{display:block;font-style:normal;font-size:8.5px;color:var(--dim2);letter-spacing:1px;margin-bottom:2px}
+  .pos b{font-family:var(--serif);font-size:12px;font-weight:500;color:var(--gold-2)}
+
+  /* ---------- 输入区 ---------- */
+  .composer{
+    flex:none; padding:9px 13px calc(9px + var(--safe-b));
+    border-top:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(10,8,16,.72),rgba(10,8,16,.96));
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  }
+  .quick{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .quick::-webkit-scrollbar{display:none}
+  .q{
+    flex:none;padding:5.5px 11px;border-radius:999px;font-size:11.5px;letter-spacing:.4px;
+    border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--dim);font-family:inherit;
+    transition:.18s;
+  }
+  .q:active{border-color:rgba(201,164,100,.45);color:var(--gold-2);background:rgba(201,164,100,.1)}
+  form{display:flex;gap:8px;align-items:flex-end}
+  textarea{
+    flex:1;min-width:0;min-height:44px;max-height:118px;resize:none;
+    padding:11px 14px;border-radius:14px;border:1px solid var(--line);
+    background:rgba(255,255,255,.045);color:var(--text);
+    font-family:inherit;font-size:16px;line-height:1.5;outline:none;
+    transition:border-color .2s,background .2s;
+  }
+  textarea::placeholder{color:#5c5570;font-size:14.5px}
+  textarea:focus{border-color:rgba(201,164,100,.45);background:rgba(255,255,255,.062)}
+  .send{
+    flex:none;height:44px;padding:0 19px;border-radius:14px;border:none;font-family:inherit;
+    background:linear-gradient(150deg,#e0c48c,#c9a464 50%,#a8833f);
+    color:#221a09;font-size:14px;font-weight:600;letter-spacing:1.5px;
+    box-shadow:0 3px 16px rgba(201,164,100,.26);
+    transition:.16s;
+  }
+  .send:active{transform:scale(.96)}
+  .send:disabled{opacity:.36;box-shadow:none}
+  .send.busy{font-size:0}
+  .send.busy::after{content:"";display:inline-block;width:15px;height:15px;border-radius:50%;border:2px solid rgba(34,26,9,.28);border-top-color:#221a09;animation:spin .75s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hdr">
+    <div class="sigil">玄</div>
+    <div class="brand">
+      <h1>玄机先生</h1>
+      <div class="status"><span class="dot" id="dot"></span><span id="mode">正在连接…</span></div>
+    </div>
+    <button class="ghost-btn" id="reset" type="button">重新起盘</button>
+  </header>
+
+  <div class="stage">
+    <main class="msgs" id="msgs"></main>
+  </div>
+
+  <div class="composer">
+    <div class="quick" id="quick"></div>
+    <form id="form" autocomplete="off">
+      <textarea id="input" rows="1" placeholder="说出你的问题，或点上面的快捷话题"></textarea>
+      <button class="send" id="send" type="submit">发送</button>
+    </form>
+  </div>
+</div>
+
+<script>
+window.__XJ_API__ = window.__XJ_API__ || '';
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var msgs = document.getElementById('msgs');
+  var form = document.getElementById('form');
+  var input = document.getElementById('input');
+  var sendBtn = document.getElementById('send');
+  var quickBox = document.getElementById('quick');
+  var busy = false;
+
+  // 接口基址：同源部署留空即可；静态托管（如 m.1238080.xyz）时指向隧道
+  var API = (window.__XJ_API__ || '').replace(/\/$/, '');
+
+  var uid = localStorage.getItem('xj_uid');
+  if (!uid) {
+    uid = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    localStorage.setItem('xj_uid', uid);
+  }
+
+  var TOPICS = [
+    ['八', '八字', '1990年5月20日下午2点半 男 北京 看看事业'],
+    ['紫', '紫微', '紫微 1990年5月20日 下午2点半 男'],
+    ['合', '合婚', '合婚'],
+    ['塔', '塔罗', '塔罗'],
+    ['卦', '六爻', '六爻'],
+    ['梦', '解梦', '解梦，我梦见'],
+    ['名', '取名', '取名，姓李，男孩'],
+    ['历', '黄历', '今天适合'],
+    ['运', '运势', '今日运势']
+  ];
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function autoGrow() {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 118) + 'px';
+  }
+  input.addEventListener('input', autoGrow);
+
+  function scrollBottom() { msgs.scrollTop = msgs.scrollHeight; }
+
+  /* ---------- 欢迎页 ---------- */
+  function renderWelcome() {
+    var w = el('div', 'welcome');
+    w.id = 'welcome';
+    w.innerHTML = ''
+      + '<div class="w-sigil">玄</div>'
+      + '<div class="w-title">问命知势</div>'
+      + '<div class="w-sub">八 字 · 紫 微 · 六 爻 · 塔 罗</div>'
+      + '<p class="w-lead">把 <b>出生年月日</b>、<b>时辰</b> 与 <b>性别</b> 告诉我，我先为您排盘，再逐层解读。</p>'
+      + '<div class="topics" id="topics"></div>'
+      + '<div class="w-foot">命盘由算法排定，解读只言倾向，不作定论<br>所问之事可随心说，先生自会顺势作答</div>';
+    msgs.appendChild(w);
+
+    var box = w.querySelector('#topics');
+    TOPICS.forEach(function (t) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'topic';
+      b.innerHTML = '<span class="g">' + t[0] + '</span><span class="n">' + t[1] + '</span>';
+      b.addEventListener('click', function () {
+        input.value = t[2]; input.focus(); autoGrow();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function dropWelcome() {
+    var node = document.getElementById('welcome');
+    if (node) node.remove();
+  }
+
+  /* ---------- 快捷条 ---------- */
+  TOPICS.forEach(function (t) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'q';
+    b.textContent = t[1];
+    b.addEventListener('click', function () {
+      input.value = t[2]; input.focus(); autoGrow();
+    });
+    quickBox.appendChild(b);
+  });
+
+  /* ---------- 文本处理 ---------- */
+  // 中文排版微调：直引号成对转中文引号，去掉行首多余的列表符号
+  function typo(t) {
+    var out = t.replace(/"([^"\n]{1,80})"/g, '“$1”').replace(/'([^'\n]{1,80})'/g, '“$1”');
+    out = out.replace(/^\s*(?:[-*·]\s+|\d+[.、)]\s+)/gm, '');
+    return out.replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  function splitReply(text) {
+    var i = text.indexOf('—————');
+    if (i < 0) return { body: text, chart: '' };
+    return { body: text.slice(0, i).trim(), chart: text.slice(i).replace(/^[\s—]+/, '') };
+  }
+
+  var WX_CLS = { '木': 'wx-木', '火': 'wx-火', '土': 'wx-土', '金': 'wx-金', '水': 'wx-水' };
+
+  /* ---------- 八字命盘 ---------- */
+  function renderBazi(v) {
+    var card = el('div', 'chart-card');
+    var meta = v.meta || {};
+
+    var head = el('div', 'cc-head');
+    head.appendChild(el('span', 'cc-tag', '八字命盘'));
+    head.appendChild(el('span', 'cc-date',
+      (meta['阳历'] || '') + ' · ' + (meta['性别'] || '') + ' · ' + (meta['时辰'] || '')));
+    card.appendChild(head);
+
+    var bits = [];
+    if (meta['农历']) bits.push('农历 ' + meta['农历']);
+    if (meta['出生地']) bits.push(meta['出生地']);
+    if (meta['真太阳时']) bits.push('真太阳时 ' + String(meta['真太阳时']).replace('（', ' (').replace('）', ')'));
+    card.appendChild(el('div', 'cc-sub', bits.join('   ·   ')));
+
+    var pg = el('div', 'pg');
+    pg.appendChild(el('div', 'lbl', ''));
+    (v.pillars || []).forEach(function (p) {
+      pg.appendChild(el('div', 'hd' + (p.used === false ? ' dim' : ''), p.label));
+    });
+
+    function addRow(label, cls, fn) {
+      pg.appendChild(el('div', 'lbl', label));
+      (v.pillars || []).forEach(function (p) {
+        var d = el('div', cls + (p.label === '日柱' ? ' daycol' : '') + (p.used === false ? ' dim' : ''), '');
+        fn(d, p);
+        pg.appendChild(d);
+      });
+    }
+
+    addRow('十神', 'ss', function (d, p) { d.textContent = p.shishen || '—'; });
+    addRow('天干', 'gz', function (d, p) {
+      d.textContent = p.gan || '—';
+      d.className += ' ' + (WX_CLS[p.gan_wx] || '');
+    });
+    addRow('地支', 'gz', function (d, p) {
+      d.textContent = p.zhi || '—';
+      d.className += ' ' + (WX_CLS[p.zhi_wx] || '');
+    });
+    addRow('藏干', 'small', function (d, p) {
+      if (!p.cang || !p.cang.length) { d.textContent = '—'; return; }
+      p.cang.forEach(function (c) {
+        var sp = el('span', null, c);
+        sp.innerHTML = '<b style="font-weight:500;color:#a9a2ba">' + c.slice(0, 1) + '</b>' +
+                       '<i style="font-style:normal;color:#6f6884">' + c.slice(1) + '</i>';
+        d.appendChild(sp);
+      });
+    });
+    addRow('纳音', 'small', function (d, p) { d.textContent = p.nayin || '—'; });
+    addRow('地势', 'small', function (d, p) { d.textContent = p.dishi || '—'; });
+    card.appendChild(pg);
+
+    var dm = v.day_master || {};
+    var sec1 = el('div', 'cc-sec');
+    sec1.appendChild(el('div', 'cc-sec-t', '日 主 强 弱'));
+    var dmRow = el('div', 'dm-row');
+    dmRow.appendChild(el('div', 'dm-glyph ' + (WX_CLS[dm.wx] || ''), dm.gan || ''));
+
+    var info = el('div', 'dm-info');
+    var l1 = el('div', 'dm-line1');
+    l1.innerHTML = '<span class="k">' + (dm.gan || '') + (dm.wx || '') + '</span>'
+      + '<span class="s">' + (dm.strength || '') + '</span>'
+      + '<span class="n">同党 ' + (dm.tong != null ? dm.tong : '—') + '　异党 ' + (dm.yi != null ? dm.yi : '—') + '</span>';
+    info.appendChild(l1);
+
+    var tong = Number(dm.tong || 0), yi = Number(dm.yi || 0), tot = (tong + yi) || 1;
+    var bal = el('div', 'bal');
+    var ba = el('b', 'a'); ba.style.width = (tong / tot * 100).toFixed(1) + '%';
+    var bb = el('b', 'b'); bb.style.width = (yi / tot * 100).toFixed(1) + '%';
+    bal.appendChild(ba); bal.appendChild(bb);
+    info.appendChild(bal);
+
+    var lg = el('div', 'bal-legend');
+    lg.appendChild(el('span', null, '自身之气 ' + (tong / tot * 100).toFixed(0) + '%'));
+    lg.appendChild(el('span', null, '克泄之气 ' + (yi / tot * 100).toFixed(0) + '%'));
+    info.appendChild(lg);
+    dmRow.appendChild(info);
+    sec1.appendChild(dmRow);
+
+    if (v.yongshen) {
+      var ys = el('div', 'tag-wrap');
+      ys.style.marginTop = '9px';
+      ys.appendChild(el('span', 'tag', '用神 · ' + v.yongshen));
+      sec1.appendChild(ys);
+    }
+    card.appendChild(sec1);
+
+    if (v.elements && v.elements.length) {
+      var sec2 = el('div', 'cc-sec');
+      sec2.appendChild(el('div', 'cc-sec-t', '五 行 分 布'));
+      var list = el('div', 'wx-list');
+      v.elements.forEach(function (e) {
+        var item = el('div', 'wx-item');
+        item.appendChild(el('span', 'wx-name ' + (WX_CLS[e.name] || ''), e.name));
+        var bar = el('div', 'wx-bar');
+        var fill = el('b');
+        fill.style.width = Math.max(2, Math.min(100, e.pct)) + '%';
+        fill.style.background = e.color;
+        bar.appendChild(fill);
+        item.appendChild(bar);
+        item.appendChild(el('span', 'wx-val', String(e.value)));
+        list.appendChild(item);
+      });
+      sec2.appendChild(list);
+      card.appendChild(sec2);
+    }
+
+    if (v.shensha && v.shensha.length) {
+      var sec3 = el('div', 'cc-sec');
+      sec3.appendChild(el('div', 'cc-sec-t', '神 煞'));
+      var tw = el('div', 'tag-wrap');
+      v.shensha.forEach(function (s) { tw.appendChild(el('span', 'tag', s)); });
+      sec3.appendChild(tw);
+      card.appendChild(sec3);
+    }
+
+    if (v.dayun && v.dayun.length) {
+      var sec4 = el('div', 'cc-sec');
+      sec4.appendChild(el('div', 'cc-sec-t', '大 运'));
+      var sc = el('div', 'yun-scroll');
+      v.dayun.forEach(function (dd) {
+        var c = el('div', 'yun' + (dd.current ? ' cur' : ''));
+        c.appendChild(el('div', 'gz ' + (WX_CLS[dd.gan_wx] || ''), dd.gz));
+        c.appendChild(el('div', 'age', dd.age + '岁起'));
+        sc.appendChild(c);
+      });
+      sec4.appendChild(sc);
+      card.appendChild(sec4);
+    }
+
+    if (v.liunian && v.liunian.length) {
+      var sec5 = el('div', 'cc-sec');
+      sec5.appendChild(el('div', 'cc-sec-t', '近 年 流 年'));
+      var lw = el('div', 'ln-wrap');
+      v.liunian.forEach(function (x) {
+        var n = el('span', 'ln', String(x.year) + ' ');
+        n.appendChild(el('b', WX_CLS[x.gan_wx] || '', x.gz));
+        n.appendChild(document.createTextNode(' ' + (x.shishen || '')));
+        lw.appendChild(n);
+      });
+      sec5.appendChild(lw);
+      card.appendChild(sec5);
+    }
+
+    var ex = v.extra || {};
+    var bits2 = [];
+    if (ex['胎元']) bits2.push('胎元 ' + ex['胎元']);
+    if (ex['命宫']) bits2.push('命宫 ' + ex['命宫']);
+    if (ex['身宫']) bits2.push('身宫 ' + ex['身宫']);
+    var tailLines = [];
+    if (bits2.length) tailLines.push(bits2.join('   ·   '));
+    if (v.start_yun) tailLines.push(v.start_yun);
+    if (v.time_unknown) tailLines.push('※ 未提供时辰，按时柱未知处理，以年月日三柱为主。');
+    if (tailLines.length) {
+      var sec6 = el('div', 'cc-sec');
+      var sub = el('div', 'cc-sub', tailLines.join('\n'));
+      sub.style.padding = '0';
+      sub.style.border = 'none';
+      sec6.appendChild(sub);
+      card.appendChild(sec6);
+    }
+
+    return card;
+  }
+
+  /* ---------- 紫微命盘 ---------- */
+  function renderZiwei(v) {
+    var card = el('div', 'chart-card');
+    var meta = v.meta || {};
+    if (meta['出生地'] && meta['出生地'].indexOf('未提供') === 0) meta['出生地'] = '按北京时间';
+
+    var head = el('div', 'cc-head');
+    head.appendChild(el('span', 'cc-tag', '紫微斗数'));
+    head.appendChild(el('span', 'cc-date',
+      (meta['阳历'] || '') + ' · ' + (meta['性别'] || '') + ' · ' + (meta['时辰'] || '')));
+    card.appendChild(head);
+
+    var bits = [];
+    if (meta['农历']) bits.push('农历 ' + meta['农历']);
+    if (meta['出生地']) bits.push(meta['出生地']);
+    card.appendChild(el('div', 'cc-sub', bits.join('   ·   ')));
+
+    var sec0 = el('div', 'cc-sec');
+    sec0.appendChild(el('div', 'cc-sec-t', '命 身 与 局'));
+    var tw = el('div', 'tag-wrap');
+    var ming = v.ming || {};
+    tw.appendChild(el('span', 'tag', '命宫 ' + (ming.ganzhi || '')));
+    if (ming.stars && ming.stars.length) tw.appendChild(el('span', 'tag', ming.stars.join('、')));
+    var shen = v.shen || {};
+    if (shen.zhi) tw.appendChild(el('span', 'tag plain', '身宫 ' + shen.zhi + '（' + (shen.name || '') + '）'));
+    if (v.bureau) tw.appendChild(el('span', 'tag plain', v.bureau));
+    var sh = v.sihua || {};
+    if (sh['禄']) {
+      tw.appendChild(el('span', 'tag plain', '禄 ' + sh['禄']));
+      tw.appendChild(el('span', 'tag plain', '权 ' + (sh['权'] || '')));
+      tw.appendChild(el('span', 'tag plain', '科 ' + (sh['科'] || '')));
+      tw.appendChild(el('span', 'tag plain', '忌 ' + (sh['忌'] || '')));
+    }
+    sec0.appendChild(tw);
+    card.appendChild(sec0);
+
+    if (v.palaces && v.palaces.length) {
+      var sec = el('div', 'cc-sec');
+      sec.appendChild(el('div', 'cc-sec-t', '十 二 宫'));
+      var grid = el('div', 'zw-grid');
+      v.palaces.forEach(function (p) {
+        var c = el('div', 'zw' + (p.is_ming || p.is_shen ? ' key' : ''));
+        var nm = el('div', 'zw-name');
+        nm.appendChild(el('span', null, p.name));
+        nm.appendChild(el('span', null, p.ganzhi));
+        c.appendChild(nm);
+        var st = el('div', 'zw-stars');
+        if (p.main && p.main.length) st.textContent = p.main.join('、');
+        else st.appendChild(el('span', 'none', '空宫'));
+        c.appendChild(st);
+        if (p.aux && p.aux.length) c.appendChild(el('div', 'zw-aux', p.aux.join(' ')));
+        grid.appendChild(c);
+      });
+      sec.appendChild(grid);
+      card.appendChild(sec);
+    }
+
+    if (v.daxian && v.daxian.length) {
+      var sec2 = el('div', 'cc-sec');
+      sec2.appendChild(el('div', 'cc-sec-t', '大 限'));
+      var sc = el('div', 'yun-scroll');
+      v.daxian.forEach(function (dd) {
+        var c = el('div', 'yun');
+        c.appendChild(el('div', 'gz', dd.zhi));
+        c.appendChild(el('div', 'age', dd.from + '-' + dd.to));
+        sc.appendChild(c);
+      });
+      sec2.appendChild(sc);
+      card.appendChild(sec2);
+    }
+
+    return card;
+  }
+
+  /* ---------- 塔罗牌阵 ---------- */
+  function renderTarot(v) {
+    var card = el('div', 'chart-card');
+    var meta = v.meta || {};
+
+    var head = el('div', 'cc-head');
+    head.appendChild(el('span', 'cc-tag', '塔罗' + (meta.spread || '')));
+    head.appendChild(el('span', 'cc-date', (meta.upright || 0) + ' 正 · ' + (meta.reversed || 0) + ' 逆'));
+    card.appendChild(head);
+
+    var sec = el('div', 'cc-sec');
+    sec.style.paddingBottom = '6px';
+    var CIRCLED = ['①', '②', '③', '④', '⑤'];
+    (v.cards || []).forEach(function (c, i) {
+      var row = el('div', 'tr');
+      var pos = el('div', 'tr-pos');
+      pos.appendChild(document.createTextNode(CIRCLED[i] || (i + 1)));
+      pos.appendChild(el('span', null, c.pos));
+      row.appendChild(pos);
+
+      var body = el('div', 'tr-body');
+      var nm = el('div', 'tr-name');
+      nm.appendChild(el('b', null, c.name));
+      nm.appendChild(el('span', 'tr-flag ' + (c.rev ? 'rev' : 'up'), c.rev ? '逆位' : '正位'));
+      body.appendChild(nm);
+      if (c.meaning) body.appendChild(el('div', 'tr-meaning', c.meaning));
+      row.appendChild(body);
+      sec.appendChild(row);
+    });
+    card.appendChild(sec);
+    return card;
+  }
+
+  /* ---------- 六爻卦象 ---------- */
+  function renderLiuyao(v) {
+    var card = el('div', 'chart-card');
+
+    var head = el('div', 'cc-head');
+    head.appendChild(el('span', 'cc-tag', '六爻金钱卦'));
+    head.appendChild(el('span', 'cc-date', (v.meta || {}).time || ''));
+    card.appendChild(head);
+
+    var sec = el('div', 'cc-sec');
+    sec.appendChild(el('div', 'cc-sec-t', '卦 象'));
+
+    var wrap = el('div', 'hex-wrap');
+    var lineMap = {};
+    (v.lines || []).forEach(function (l) { lineMap[l.n] = l; });
+
+    function drawHex(g, isBian) {
+      var box = el('div', 'hex-box' + (isBian ? '' : ' key'));
+      box.appendChild(el('div', 'hex-lbl', isBian ? '变 卦' : '本 卦'));
+      var hex = el('div', 'hex');
+      for (var n = 6; n >= 1; n--) {
+        var l = lineMap[n] || {};
+        var yang = !!l.yang;
+        if (isBian && l.moving) yang = !yang;
+        var y = el('div', 'yao ' + (yang ? 'yang' : 'yin') + (l.moving ? ' mv' : ''));
+        y.appendChild(el('i'));
+        if (!yang) y.appendChild(el('i'));
+        hex.appendChild(y);
+      }
+      box.appendChild(hex);
+      box.appendChild(el('div', 'hex-name', g.name || ''));
+      box.appendChild(el('div', 'hex-sub', '上' + (g.up || '') + ' · 下' + (g.down || '') + ' · ' + (g.wx || '')));
+      return box;
+    }
+
+    wrap.appendChild(drawHex(v.ben || {}, false));
+    wrap.appendChild(el('div', 'hex-arrow', '→'));
+    wrap.appendChild(drawHex(v.bian || {}, true));
+    sec.appendChild(wrap);
+
+    var mv = el('div', 'mv-line');
+    if (v.count) {
+      (v.moving || []).forEach(function (m) {
+        mv.appendChild(el('span', 'tag', '第 ' + m + ' 爻动'));
+      });
+      mv.appendChild(el('span', 'tag plain', '共 ' + v.count + ' 爻动'));
+    } else {
+      mv.appendChild(el('span', 'tag plain', '静卦 · 无动爻'));
+    }
+    sec.appendChild(mv);
+    card.appendChild(sec);
+    return card;
+  }
+
+  /* ---------- 黄历 ---------- */
+  function renderAlmanac(v) {
+    var card = el('div', 'chart-card');
+    var meta = v.meta || {};
+
+    var head = el('div', 'cc-head');
+    head.appendChild(el('span', 'cc-tag', '今日黄历'));
+    head.appendChild(el('span', 'cc-date', meta['公历'] || ''));
+    card.appendChild(head);
+
+    var bits = [];
+    if (meta['农历']) bits.push('农历 ' + meta['农历']);
+    if (meta['干支']) bits.push(meta['干支']);
+    if (meta['节气']) bits.push(meta['节气']);
+    card.appendChild(el('div', 'cc-sub', bits.join('   ·   ')));
+
+    var sec = el('div', 'cc-sec');
+    var grid = el('div', 'al-grid');
+
+    function col(kind, title, items) {
+      var c = el('div', 'al-col ' + kind);
+      c.appendChild(el('div', 'al-t', title));
+      var box = el('div', 'al-items');
+      (items || []).forEach(function (x) { box.appendChild(el('span', null, x)); });
+      if (!items || !items.length) box.appendChild(el('span', null, '—'));
+      c.appendChild(box);
+      return c;
+    }
+    grid.appendChild(col('yi', '宜', v.yi));
+    grid.appendChild(col('ji', '忌', v.ji));
+    sec.appendChild(grid);
+
+    var pos = v.pos || {};
+    var pr = el('div', 'pos-row');
+    [['喜神', pos['喜神']], ['财神', pos['财神']], ['福神', pos['福神']]].forEach(function (kv) {
+      var b = el('div', 'pos');
+      b.appendChild(el('em', null, kv[0]));
+      b.appendChild(el('b', null, kv[1] || '—'));
+      pr.appendChild(b);
+    });
+    sec.appendChild(pr);
+
+    var tail = [];
+    if (v.chong) tail.push('冲 ' + v.chong);
+    if (v.sha) tail.push('煞' + v.sha);
+    if (tail.length) {
+      var t = el('div', 'cc-sub', tail.join('   ·   '));
+      t.style.padding = '9px 0 0';
+      t.style.border = 'none';
+      sec.appendChild(t);
+    }
+    card.appendChild(sec);
+
+    if ((v.good && v.good.length) || (v.bad && v.bad.length)) {
+      var s2 = el('div', 'cc-sec');
+      s2.appendChild(el('div', 'cc-sec-t', '吉 神 凶 煞'));
+      var tw = el('div', 'tag-wrap');
+      (v.good || []).forEach(function (x) { tw.appendChild(el('span', 'tag', x)); });
+      (v.bad || []).forEach(function (x) { tw.appendChild(el('span', 'tag plain', x)); });
+      s2.appendChild(tw);
+      card.appendChild(s2);
+    }
+
+    if (v.pengzu) {
+      var s3 = el('div', 'cc-sec');
+      var pz = el('div', 'cc-sub', '彭祖百忌 · ' + v.pengzu);
+      pz.style.padding = '0';
+      pz.style.border = 'none';
+      s3.appendChild(pz);
+      card.appendChild(s3);
+    }
+    return card;
+  }
+
+  function renderChart(v) {
+    if (!v || !v.type) return null;
+    try {
+      if (v.type === 'ziwei') return renderZiwei(v);
+      if (v.type === 'bazi') return renderBazi(v);
+      if (v.type === 'tarot') return renderTarot(v);
+      if (v.type === 'liuyao') return renderLiuyao(v);
+      if (v.type === 'almanac') return renderAlmanac(v);
+    } catch (e) { return null; }
+    return null;
+  }
+
+  /* ---------- 消息 ---------- */
+  function addRow(who, text, opts) {
+    opts = opts || {};
+    dropWelcome();
+
+    var row = el('div', 'row ' + (who === 'me' ? 'me' : 'them'));
+    if (who !== 'me') row.appendChild(el('div', 'ava', '玄'));
+
+    var wrap = el('div', 'wrap');
+    wrap.appendChild(el('div', 'who', who === 'me' ? '我' : '玄机先生'));
+
+    var bub = el('div', 'bubble' + (opts.err ? ' err' : ''));
+
+    if (who === 'me') {
+      bub.textContent = text;
+    } else {
+      var p = splitReply(text);
+
+      var cardEl = renderChart(opts.chart);
+      if (cardEl) {
+        // 命盘/牌阵独立成卡，整宽展示，不与气泡边框叠加
+        cardEl.classList.add('solo');
+        wrap.appendChild(cardEl);
+      } else if (p.chart) {
+        var pre = el('pre', null, p.chart);
+        pre.style.whiteSpace = 'pre';
+        pre.style.overflowX = 'auto';
+        pre.style.marginTop = '9px';
+        pre.style.padding = '10px 11px';
+        pre.style.borderRadius = '10px';
+        pre.style.background = 'rgba(0,0,0,.34)';
+        pre.style.border = '1px solid rgba(255,255,255,.07)';
+        pre.style.fontFamily = 'Consolas,"Cascadia Mono",monospace';
+        pre.style.fontSize = '10.5px';
+        pre.style.lineHeight = '1.7';
+        pre.style.color = '#cfc7e2';
+        wrap.appendChild(pre);
+      }
+
+      if (p.body) {
+        p.body = typo(p.body);
+        var body = el('div', 'body');
+        var paras = p.body.split(/\n{2,}/);
+        var long = p.body.length > 300 || paras.length > 7;
+        paras.forEach(function (seg, k) {
+          var t = seg.trim();
+          if (!t) return;
+          body.appendChild(el('div', 'para' + (k === 0 ? ' lead' : ''), t));
+        });
+        if (long) body.classList.add('clamp');
+        bub.appendChild(body);
+        if (long) {
+          var more = el('button', 'more', '展开全文');
+          more.type = 'button';
+          more.addEventListener('click', function () {
+            var on = body.classList.toggle('clamp');
+            more.textContent = on ? '展开全文' : '收起';
+          });
+          bub.appendChild(more);
+        }
+      }
+    }
+
+    wrap.appendChild(bub);
+    row.appendChild(wrap);
+    msgs.appendChild(row);
+    requestAnimationFrame(scrollBottom);
+    return row;
+  }
+
+  var typingRow = null, typingTimer = null;
+
+  function typing(on) {
+    if (on) {
+      dropWelcome();
+      var row = el('div', 'row them');
+      row.id = 'typing';
+      row.appendChild(el('div', 'ava', '玄'));
+      var wrap = el('div', 'wrap');
+      wrap.appendChild(el('div', 'who', '玄机先生'));
+      var bub = el('div', 'bubble typing-b');
+      var dots = el('div', 'dots');
+      dots.innerHTML = '<i></i><i></i><i></i>';
+      bub.appendChild(dots);
+      var txt = el('span', 'txt', '起盘中');
+      bub.appendChild(txt);
+      wrap.appendChild(bub);
+      row.appendChild(wrap);
+      msgs.appendChild(row);
+      typingRow = row;
+      scrollBottom();
+
+      var t0 = Date.now();
+      typingTimer = setInterval(function () {
+        var s = Math.round((Date.now() - t0) / 1000);
+        txt.textContent = (s >= 9 ? '推演中 ' : '起盘中 ') + s + 's';
+      }, 1000);
+    } else {
+      if (typingTimer) { clearInterval(typingTimer); typingTimer = null; }
+      if (typingRow && typingRow.parentNode) typingRow.remove();
+      typingRow = null;
+    }
+  }
+
+  /* ---------- 网络 ---------- */
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  async function pollJob(jobId) {
+    var wait = 1400;
+    var deadline = Date.now() + 300000;
+    while (Date.now() < deadline) {
+      var r;
+      try {
+        r = await fetch(API + '/chat/result/' + encodeURIComponent(jobId), { cache: 'no-store' });
+      } catch (e) {
+        await sleep(wait);
+        wait = Math.min(wait * 1.4, 6000);
+        continue;
+      }
+      if (r.status === 404) throw new Error('会话已过期，请重新发送');
+      if (!r.ok) throw new Error('服务返回 ' + r.status);
+      var dd = await r.json();
+      if (dd.status === 'done') return dd;
+      if (dd.status === 'error') throw new Error(dd.error || '先生这边出了点状况');
+      await sleep(wait);
+      wait = Math.min(wait * 1.15, 5000);
+    }
+    throw new Error('等待超时，请重试');
+  }
+
+  async function send(text) {
+    text = (text || '').trim();
+    if (busy || !text) return;
+    busy = true;
+    sendBtn.disabled = true;
+    sendBtn.classList.add('busy');
+
+    addRow('me', text);
+    input.value = '';
+    autoGrow();
+    typing(true);
+
+    try {
+      var res = await fetch(API + '/chat/async', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: uid, message: text })
+      });
+      if (!res.ok) throw new Error('服务返回 ' + res.status);
+      var job = await res.json();
+      var out = await pollJob(job.job_id);
+      typing(false);
+      addRow('them', out.reply || '（先生这次没有作答）', { chart: out.chart });
+    } catch (e) {
+      typing(false);
+      addRow('them', '这一次没接上：' + (e && e.message ? e.message : '网络异常') +
+        '\n请稍候再试，或点右上角重新起盘。', { err: true });
+    }
+
+    busy = false;
+    sendBtn.disabled = false;
+    sendBtn.classList.remove('busy');
+    if (window.innerWidth > 640) input.focus();
+  }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    send(input.value);
+  });
+
+  input.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Enter' && !ev.shiftKey && !ev.ctrlKey) {
+      ev.preventDefault();
+      send(input.value);
+    }
+  });
+
+  document.getElementById('reset').addEventListener('click', async function () {
+    if (busy) return;
+    try {
+      await fetch(API + '/reset?user_id=' + encodeURIComponent(uid), { method: 'POST' });
+    } catch (e) { /* 本地照样清屏 */ }
+    msgs.innerHTML = '';
+    typing(false);
+    renderWelcome();
+    input.value = '';
+    autoGrow();
+  });
+
+  async function loadInfo() {
+    var dot = document.getElementById('dot');
+    var mode = document.getElementById('mode');
+    try {
+      var r = await fetch(API + '/info', { cache: 'no-store' });
+      var dd = await r.json();
+      var ok = !!dd.llm_ready;
+      dot.className = 'dot' + (ok ? '' : ' off');
+      mode.textContent = ok ? ('先生在线 · ' + (dd.model || '')).replace(/\s+/g, ' ') : '离线解读模式';
+    } catch (e) {
+      dot.className = 'dot off';
+      mode.textContent = '连接中…';
+    }
+  }
+
+  renderWelcome();
+  loadInfo();
+})();
+</script>
+</body>
+</html>
